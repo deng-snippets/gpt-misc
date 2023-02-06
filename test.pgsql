@@ -1,3 +1,22 @@
+CREATE TEMPORARY TABLE core.test_data (
+  id serial primary key,
+  name text
+);
+
+INSERT INTO core.test_data (name)
+VALUES 
+  (1, 'John Jr MD Phd '),
+  (2, 'JohN! Jr  @md%phd '),
+  (3, 'Jane'),
+  (4, 'Mr. JaNe Sr. '),
+  (5, 'John.jr.md.phd'),
+  (6, 'John jr md'),
+  (7, 'John md phd jr '),
+  (8, 'John jr sr md phd'),
+  (9, 'Srinivastan'),
+  (10, 'Sri Nivas Tan');
+
+
 CREATE OR REPLACE FUNCTION preprocess_column(text)
 RETURNS text AS $$
 DECLARE
@@ -22,3 +41,6 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql;
+
+SELECT name, preprocess_column(name) AS preprocessed_name
+FROM test_data;
