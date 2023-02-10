@@ -1,0 +1,2 @@
+SELECT regexp_replace('john smith jr phd', '(^|\s)(jr|phd)(\s|$)', '', 'g') AS cleaned_text;
+SELECT regexp_replace('john smith phd jr', '(^|\s)(jr|phd)(\s|$)', '', 'g') AS cleaned_text;
