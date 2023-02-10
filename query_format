@@ -1,2 +1,9 @@
-SELECT regexp_replace('john smith jr phd', '(^|\s)(jr|phd)(\s|$)', '', 'g') AS cleaned_text;
-SELECT regexp_replace('john smith phd jr', '(^|\s)(jr|phd)(\s|$)', '', 'g') AS cleaned_text;
+CREATE OR REPLACE FUNCTION remove_stopwords(text_column text, stopwords text[])
+RETURNS text AS $$
+DECLARE
+  stopwords_regex text;
+BEGIN
+  stopwords_regex := '(^|\s)(' || array_to_string(stopwords, '|') || ')(?=\s|$)';
+  RETURN regexp_replace(text_column, stopwords_regex, '', 'g');
+END;
+$$ LANGUAGE plpgsql;
