@@ -1,9 +1,17 @@
-CREATE OR REPLACE FUNCTION remove_stopwords(text_column text, stopwords text[])
+CREATE OR REPLACE FUNCTION remove_stopwords(text_column text)
 RETURNS text AS $$
 DECLARE
   stopwords_regex text;
 BEGIN
-  stopwords_regex := '(^|\s)(' || array_to_string(stopwords, '|') || ')(?=\s|$)';
-  RETURN regexp_replace(text_column, stopwords_regex, '', 'g');
+  stopwords_regex := '(^|\s)(jr|phd|sr|mr|mrs|md)(?=\s|$)';
+  WITH cleaned_text AS (
+    SELECT regexp_replace(text_column, stopwords_regex, '', 'g') AS cleaned
+  ), transformed_text AS (
+    SELECT regexp_replace(cleaned, '[^a-zA-Z0-9]+', ' ', 'g') AS transformed
+    FROM cleaned_text
+  )
+  text_column := (SELECT transformed FROM transformed_text);
+
+  RETURN text_column;
 END;
 $$ LANGUAGE plpgsql;
