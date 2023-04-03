@@ -1,0 +1,16 @@
+streamline_sentence <- function(sentence) {
+  # Define the word mapping
+  word_mapping <- list(client360 = c("client360", "client 360", "360"))
+  
+  # Loop over each word in the mapping and streamline its variations
+  for (word in names(word_mapping)) {
+    # Define the regular expression pattern to match the variations of the word
+    pattern <- paste0("\\b", paste(word_mapping[[word]], c("", "\\s"), collapse = "|"), "\\b")
+    
+    # Replace the variations of the word with the standardized version
+    sentence <- gsub(pattern, gsub(" ", "", word), sentence, ignore.case = TRUE)
+  }
+  
+  # Return the streamlined sentence
+  return(sentence)
+}
